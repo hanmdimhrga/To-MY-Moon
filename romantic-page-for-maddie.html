@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Maddie - With Love</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffe6f2 0%, #f0e6ff 50%, #ffffff 100%);
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Georgia', 'Times New Roman', serif;
+            overflow: hidden;
+            position: relative;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="%23ff69b4" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>'), auto;
+        }
+
+        .particles-container, .hearts-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #ffd700;
+            font-size: 12px;
+            animation: sparkle 3s ease-in-out infinite;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+            0%, 100% {
+                opacity: 0;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1) rotate(180deg);
+            }
+        }
+
+        .heart {
+            position: absolute;
+            color: #ff69b4;
+            font-size: 20px;
+            animation: float 8s linear infinite;
+            opacity: 0.7;
+        }
+
+        .heart:nth-child(2n) {
+            animation-duration: 10s;
+            animation-delay: -2s;
+        }
+
+        .heart:nth-child(3n) {
+            animation-duration: 12s;
+            animation-delay: -4s;
+        }
+
+        .heart:nth-child(4n) {
+            animation-duration: 14s;
+            animation-delay: -6s;
+        }
+
+        .heart:nth-child(5n) {
+            animation-duration: 16s;
+            animation-delay: -8s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) translateX(0) rotate(0deg) scale(0.8);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+                transform: translateY(90vh) translateX(var(--drift)) rotate(36deg) scale(1);
+            }
+            50% {
+                opacity: 0.9;
+                transform: translateY(50vh) translateX(calc(var(--drift) * 1.5)) rotate(180deg) scale(1.1);
+            }
+            90% {
+                opacity: 0.7;
+                transform: translateY(10vh) translateX(calc(var(--drift) * 2)) rotate(324deg) scale(0.9);
+            }
+            100% {
+                transform: translateY(-10vh) translateX(calc(var(--drift) * 2.5)) rotate(360deg) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .message-container {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 182, 193, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 182, 193, 0.2);
+            max-width: 700px;
+            margin: 20px;
+            animation: fadeInUp 2s ease-out;
+        }
+
+        .photo-section {
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .creator-photo {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid #ff69b4;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+            object-fit: cover;
+            transition: all 0.3s ease;
+            animation: photoFloat 4s ease-in-out infinite;
+        }
+
+        .creator-photo:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.6);
+            border-color: #ff1493;
+        }
+
+        @keyframes photoFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .photo-frame {
+            position: relative;
+            display: inline-block;
+        }
+
+        .photo-frame::before {
+            content: '💕';
+            position: absolute;
+            top: -15px;
+            left: -15px;
+            font-size: 30px;
+            animation: sparkle 2s ease-in-out infinite;
+        }
+
+        .photo-frame::after {
+            content: '💕';
+            position: absolute;
+            bottom: -15px;
+            right: -15px;
+            font-size: 30px;
+            animation: sparkle 2s ease-in-out infinite reverse;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message {
+            font-size: 2.5rem;
+            color: #8a2be2;
+            line-height: 1.4;
+            font-weight: normal;
+            text-shadow: 0 2px 4px rgba(138, 43, 226, 0.2);
+            animation: gentleFloat 6s ease-in-out infinite;
+            min-height: 8rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .message-line {
+            margin: 0.5rem 0;
+            overflow: hidden;
+            white-space: nowrap;
+            border-right: 3px solid #ff69b4;
+            animation: blink-caret 1s step-end infinite;
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #ff69b4; }
+        }
+
+        @keyframes gentleFloat {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .heart-icon {
+            color: #ff69b4;
+            font-size: 3rem;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+        }
+
+        /* Glow effect for hearts */
+        .heart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            filter: blur(3px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .heart-burst {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .burst-heart {
+            position: absolute;
+            color: #ff1493;
+            font-size: 16px;
+            animation: burst 1s ease-out forwards;
+        }
+
+        @keyframes burst {
+            0% {
+                opacity: 1;
+                transform: scale(0) rotate(0deg);
+            }
+            50% {
+                opacity: 0.8;
+                transform: scale(1.5) rotate(180deg);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0) rotate(360deg) translate(
+                    calc(var(--x) * 50px),
+                    calc(var(--y) * 50px)
+                );
+            }
+        }
+
+        @media (max-width: 768px) {
+            .message {
+                font-size: 2rem;
+            }
+            .message-container {
+                padding: 30px;
+                margin: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .message {
+                font-size: 1.5rem;
+            }
+            .heart-icon {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="particles-container" id="particlesContainer"></div>
+    <div class="hearts-container" id="heartsContainer"></div>
+
+    <div class="message-container">
+        <div class="photo-section">
+            <div class="photo-frame">
+                <img src="maddie-profile.jpg" alt="Maddie and the little one" class="creator-photo" id="creatorPhoto">
+            </div>
+            <div style="margin-top: 15px; font-size: 1.2rem; color: #8a2be2; font-weight: bold;">
+                From the one who loves you most 💕
+            </div>
+        </div>
+
+        <div class="heart-icon">❤️</div>
+        <div class="message">
+            <div class="message-line" id="line1"></div>
+            <div class="message-line" id="line2"></div>
+            <div class="message-line" id="line3"></div>
+        </div>
+
+        <div style="margin-top: 30px; padding: 20px; background: rgba(255, 182, 193, 0.1); border-radius: 15px; border: 1px solid rgba(255, 182, 193, 0.3);">
+            <div style="font-size: 1rem; color: #666; line-height: 1.6;">
+                Every moment with you is magical. Your smile lights up my world, and your love makes every day special.
+                This page was created just for you, Maddie - a small token of the big love I have for you. 💖✨
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Typing effect variables
+        const messages = [
+            "Maddie, I love you.",
+            "You are the best thing",
+            "that ever happened to me."
+        ];
+        let currentLine = 0;
+        let currentChar = 0;
+        let typingSpeed = 100;
+
+        // Enhanced heart creation with physics
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+
+            // Random starting position with physics
+            const startX = Math.random() * window.innerWidth;
+            const startY = window.innerHeight + 50;
+            heart.style.left = startX + 'px';
+            heart.style.top = startY + 'px';
+
+            // Random size and physics properties
+            const size = 15 + Math.random() * 25;
+            heart.style.fontSize = size + 'px';
+
+            // Random horizontal drift
+            const drift = (Math.random() - 0.5) * 100;
+            heart.style.setProperty('--drift', drift + 'px');
+
+            // Random animation duration
+            const duration = 6 + Math.random() * 8;
+            heart.style.animationDuration = duration + 's';
+
+            // Add to container
+            document.getElementById('heartsContainer').appendChild(heart);
+
+            // Remove heart after animation completes
+            setTimeout(() => {
+                if (heart.parentNode) {
+                    heart.parentNode.removeChild(heart);
+                }
+            }, duration * 1000);
+        }
+
+        // Create sparkle particles
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.textContent = '✨';
+
+            // Random position
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+
+            // Random size
+            const size = 8 + Math.random() * 8;
+            sparkle.style.fontSize = size + 'px';
+
+            document.getElementById('particlesContainer').appendChild(sparkle);
+
+            // Remove sparkle after animation
+            setTimeout(() => {
+                if (sparkle.parentNode) {
+                    sparkle.parentNode.removeChild(sparkle);
+                }
+            }, 3000);
+        }
+
+        // Heart burst effect on click
+        function createHeartBurst(x, y) {
+            const burstContainer = document.createElement('div');
+            burstContainer.className = 'heart-burst';
+            burstContainer.style.left = x + 'px';
+            burstContainer.style.top = y + 'px';
+
+            // Create 8 hearts in a burst pattern
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const burstHeart = document.createElement('div');
+                burstHeart.className = 'burst-heart';
+                burstHeart.textContent = '💖';
+                burstHeart.style.setProperty('--x', Math.cos(angle));
+                burstHeart.style.setProperty('--y', Math.sin(angle));
+                burstHeart.style.animationDelay = (i * 0.05) + 's';
+                burstContainer.appendChild(burstHeart);
+            }
+
+            document.body.appendChild(burstContainer);
+
+            // Remove burst after animation
+            setTimeout(() => {
+                if (burstContainer.parentNode) {
+                    burstContainer.parentNode.removeChild(burstContainer);
+                }
+            }, 1000);
+        }
+
+        // Typing effect function
+        function typeWriter() {
+            if (currentLine < messages.length) {
+                const lineElement = document.getElementById('line' + (currentLine + 1));
+                const currentMessage = messages[currentLine];
+
+                if (currentChar < currentMessage.length) {
+                    lineElement.textContent += currentMessage.charAt(currentChar);
+                    currentChar++;
+                    setTimeout(typeWriter, typingSpeed);
+                } else {
+                    // Move to next line
+                    currentLine++;
+                    currentChar = 0;
+                    setTimeout(typeWriter, 500); // Pause between lines
+                }
+            }
+        }
+
+        // Enhanced heart rain with better timing
+        function startHeartRain() {
+            createHeart();
+            const delay = 200 + Math.random() * 400;
+            setTimeout(startHeartRain, delay);
+        }
+
+        // Sparkle creation interval
+        function startSparkles() {
+            createSparkle();
+            setTimeout(startSparkles, 2000 + Math.random() * 3000);
+        }
+
+        // Click handler for heart bursts
+        document.addEventListener('click', (e) => {
+            createHeartBurst(e.clientX, e.clientY);
+        });
+
+        // Initialize everything
+        window.addEventListener('load', () => {
+            // Start typing effect after a delay
+            setTimeout(typeWriter, 1000);
+
+            // Start heart rain
+            startHeartRain();
+
+            // Start sparkles
+            startSparkles();
+
+            // Create initial hearts
+            for (let i = 0; i < 20; i++) {
+                setTimeout(createHeart, i * 150);
+            }
+        });
+
+        // Add some extra magic - mouse movement sparkles
+        let sparkleTimeout;
+        document.addEventListener('mousemove', (e) => {
+            clearTimeout(sparkleTimeout);
+            sparkleTimeout = setTimeout(() => {
+                if (Math.random() < 0.1) { // 10% chance
+                    createSparkle();
+                }
+            }, 100);
+        });
+
+        // Fixed profile photo (no upload needed)
+        const creatorPhoto = document.getElementById('creatorPhoto');
+    </script>
+</body>
+</html>
